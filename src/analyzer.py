@@ -10,10 +10,26 @@ A股自选股智能分析系统 - AI分析层
 3. 结合技术面和消息面生成分析报告
 """
 
+import io
 import json
 import logging
+import os
+import sys
 import time
 from dataclasses import dataclass
+
+# 解决 Windows 下 httpx 编码问题
+if os.name == 'nt':
+    os.environ.setdefault('PYTHONUTF8', '1')
+    # 修复 stdout/stderr 编码
+    try:
+        sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+    except AttributeError:
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+    try:
+        sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+    except AttributeError:
+        sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
 from typing import Optional, Dict, Any, List
 
 from tenacity import (
